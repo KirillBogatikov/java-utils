@@ -41,19 +41,8 @@
             <url>https://github.com/Projector-Solutions/maven-private/raw/master/snapshots</url>
         </repository>
     </repositories>
-    <distributionManagement>
-        <repository>
-            <id>Magic-Releases</id>
-            <url>file://${project.basedir}/../maven-${maven.repository.prefix}</url>
-        </repository>
-        <snapshotRepository>
-            <id>Magic-Snapshots</id>
-            <url>file://${project.basedir}/../maven-${maven.repository.prefix}</url>
-        </snapshotRepository>
-    </distributionManagement>
     <properties>
     	<junit.version>4.13</junit.version>
-    	<maven.repository.prefix>public</maven.repository.prefix>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
     </properties>
