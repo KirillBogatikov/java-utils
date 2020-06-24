@@ -5,40 +5,24 @@
     <version>0.0.2</version>
     <packaging>pom</packaging>
     <name>Common utils project</name>
-	<repositories>
+	
+    <repositories>
         <repository>
-            <id>KirillBogatikov-Releases</id>
-            <url>https://github.com/KirillBogatikov/MavenArtifacts/raw/master/releases</url>
+            <id>KirillBogatikov Public</id>
+            <url>https://github.com/KirillBogatikov/maven-public/raw/master</url>
         </repository>
         <repository>
-            <id>KirillBogatikov-Snapshots</id>
-            <url>https://github.com/KirillBogatikov/MavenArtifacts/raw/master/snapshots</url>
+            <id>Magic-Library</id>
+            <url>https://github.com/Magic-Library/maven-public/raw/master</url>
         </repository>
         <repository>
-            <id>Magic-Releases</id>
-            <url>https://github.com/Magic-Library/maven-repository/raw/master/releases</url>
+            <id>Public-Projector</id>
+            <url>https://github.com/Projector-Solutions/maven-public/raw/master</url>
         </repository>
         <repository>
-            <id>Magic-Snapshots</id>
-            <url>https://github.com/Magic-Library/maven-repository/raw/master/snapshots</url>
-        </repository>
-        <repository>
-            <id>Public-Releases</id>
-            <url>https://github.com/Projector-Solutions/maven-public/raw/master/releases</url>
-        </repository>
-        <repository>
-            <id>Public-Snapshots</id>
-            <url>https://github.com/Projector-Solutions/maven-public/raw/master/snapshots</url>
-        </repository>
-        <repository>
-            <id>Private-Releases</id>
+            <id>Private-Projector</id>
             <!-- PUBLIC URL, BUT PRIVATE ACCESS :) -->
-            <url>https://github.com/Projector-Solutions/maven-private/raw/master/releases</url>
-        </repository>
-        <repository>
-            <id>Private-Snapshots</id>
-            <!-- PUBLIC URL, BUT PRIVATE ACCESS :) -->
-            <url>https://github.com/Projector-Solutions/maven-private/raw/master/snapshots</url>
+            <url>https://github.com/Projector-Solutions/maven-private/raw/master</url>
         </repository>
     </repositories>
     <properties>
