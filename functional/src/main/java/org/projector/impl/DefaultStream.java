@@ -121,17 +121,16 @@ public class DefaultStream<ValueType> implements Stream<ValueType> {
     			throw new IllegalStateException("Consumer returns negative group ID");
     		}
     		
-    		boolean ensured = id > list.size();
+    		boolean ensured = id >= list.size();
     		if (ensured) {
-    			list.ensureCapacity(id + 1);
+    			for (int i = list.size(); i < id + 1; i++) {
+    				list.add(null);
+    			}
     		}
     		
     		OutType out = list.get(id);
     		out = groupEditor.consume(new Duet<>(value, out));
-    		
-    		if (ensured) {
-    			list.add(out);
-    		}
+			list.set(id, out);
         }
         
         return new DefaultStream<>(list);
@@ -151,7 +150,7 @@ public class DefaultStream<ValueType> implements Stream<ValueType> {
 	@Override
 	public boolean all(Consumer<ValueType, Boolean> consumer) {
 		checkNotNull(consumer, "Consumer");
-		return any(v -> !consumer.consume(v));
+		return !any(v -> !consumer.consume(v));
 	}
 
 	@Override
@@ -207,7 +206,7 @@ public class DefaultStream<ValueType> implements Stream<ValueType> {
 	@Override
 	public Double max(Consumer<ValueType, Double> consumer) {
 		checkNotNull(consumer, "Consumer");
-		NotNullValue<Double> max = new NotNullValue<>(0.0);
+		NotNullValue<Double> max = new NotNullValue<>(-Double.MAX_VALUE);
 		
 		foreach(v -> { 
 			double result = consumer.consume(v);
@@ -222,11 +221,11 @@ public class DefaultStream<ValueType> implements Stream<ValueType> {
 	@Override
 	public Double min(Consumer<ValueType, Double> consumer) {
 		checkNotNull(consumer, "Consumer");
-		NotNullValue<Double> min = new NotNullValue<>(0.0);
+		NotNullValue<Double> min = new NotNullValue<>(Double.MAX_VALUE);
 		
 		foreach(v -> { 
 			double result = consumer.consume(v);
-			if (min.get() < result) {
+			if (min.get() > result) {
 				min.set(result);
 			}
 		});

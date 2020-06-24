@@ -27,6 +27,6 @@ public interface Stream<ValueType> {
 	public Double average(Consumer<ValueType, Double> consumer);
 	public Double max(Consumer<ValueType, Double> consumer);
 	public Double min(Consumer<ValueType, Double> consumer);
-	
+		
 	public List<ValueType> toList();
 }
