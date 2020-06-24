@@ -1,78 +1,48 @@
 package org.projector.utils;
 
+import static org.projector.utils.Nullable.checkNotNull;
+import static org.projector.utils.Nullable.checkAllNotNull;
+
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.Arrays;
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
-import static org.projector.utils.Nullable.checkNotNull;
+import org.projector.impl.DefaultStream;
+import org.projector.interfaces.Selector;
+import org.projector.interfaces.Stream;
 
 public class Functional {
-    public interface Mapper<K, V> {
-        public K keyFor(V value, LoopController loop);
-    }
-
-    public interface Selector<V, O> {
-        public O select(V input, LoopController loop);
-    }
-
-    public interface LoopController {
-        void skip();
-        void stop();
-        int index();
-    }
-
-    private static class DefaultLoopController implements LoopController {
-        static final int ADD = 0, SKIP = 1, STOP = 2;
-
-        int index;
-        int action;
-
-        public void skip() {
-            action = SKIP;
-        }
-
-        public void stop() {
-            action = STOP;
-        }
-
-        public int index() {
-            return index;
-        }
-    }
 
     @SafeVarargs
-	public static <K, V> Map<K, V> map(Mapper<K, V> mapper, V... values) {
-        checkNotNull(mapper, "Mapper", null);
-        checkNotNull(mapper, "Values array", "can not be null, but can be empty");
-        Map<K, V> result = new HashMap<>();
-
-		DefaultLoopController loop = new DefaultLoopController();
-        for (int i = 0; i < values.length; i++) {
-            loop.index = i;
-            loop.action = DefaultLoopController.ADD;
-            K key = mapper.keyFor(values[i], loop);
-			
-			if (loop.action == DefaultLoopController.ADD) result.put(key, values[i]);
-            else if (loop.action == DefaultLoopController.STOP) break;
-        }
-        return result;
+	public static <K, V> Map<K, V> map(Selector<V, K> selector, V... values) {
+    	return createStream(values).map(selector);
     }
 
     @SafeVarargs
 	public static <V, O> List<O> select(Selector<V, O> selector, V... values) {
-        checkNotNull(selector, "Selector", null);
-        List<O> result = new ArrayList<>();
-
-        DefaultLoopController loop = new DefaultLoopController();
-        for (int i = 0; i < values.length; i++) {
-            loop.index = i;
-            loop.action = DefaultLoopController.ADD;
-            O out = selector.select(values[i], loop);
-
-            if (loop.action == DefaultLoopController.ADD) result.add(out);
-            else if (loop.action == DefaultLoopController.STOP) break;
-        }
-        return result;
+        return createStream(values)
+    		.select(selector)
+    		.toList();
+    }
+    
+    @SafeVarargs
+	public static <T> Stream<T> createStream(T... values) {
+    	checkNotNull(values, "Values array", "can not be null, but can be empty");
+        
+    	ArrayList<T> list = new ArrayList<>(Arrays.asList(values));
+    	return new DefaultStream<>(list);
+    }
+    
+    @SafeVarargs
+	public static <T> Stream<T> createJoinedStream(Collection<T>... parts) {
+    	checkAllNotNull(parts, "Parts");
+    	
+    	ArrayList<T> list = new ArrayList<>();
+    	for (Collection<T> c : parts) {
+    		list.addAll(c);
+    	}    	
+    	return new DefaultStream<T>(list);
     }
 }
