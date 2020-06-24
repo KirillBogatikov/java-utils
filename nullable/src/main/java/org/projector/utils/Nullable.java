@@ -18,6 +18,17 @@ public class Nullable {
     public static void checkNotNull(Object value, String name) {
     	checkNotNull(value, name, null);
     }
+    
+    public static void checkAllNotNull(Object[] values, String name, String message) {
+    	checkNotNull(values, "Values array", "required for check");
+    	for (int i = 0; i < values.length; i++) {
+    		checkNotNull(values[i], String.format("Value at %d", i));
+    	}
+    }
+    
+    public static void checkAllNotNull(Object[] values, String name) {
+    	checkAllNotNull(values, name, null);
+    }
 
     public static <V, O> O ifNotNull(V value, Consumer<V, O> consumer) {
         checkNotNull(consumer, "Consumer", null);
