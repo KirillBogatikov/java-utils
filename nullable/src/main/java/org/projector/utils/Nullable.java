@@ -14,6 +14,10 @@ public class Nullable {
             throw new NullPointerException(info);
         }
     }
+    
+    public static void checkNotNull(Object value, String name) {
+    	checkNotNull(value, name, null);
+    }
 
     public static <V, O> O ifNotNull(V value, Consumer<V, O> consumer) {
         checkNotNull(consumer, "Consumer", null);
