@@ -1,0 +1,32 @@
+v. 0.0.1 (Argali) - first stable release
+1. Utilitary types:
+Duet - a pair of two values (A & B)
+Trio - simple structure for three values (A, B and C)
+NotNullValue - object, which allows only not-null value and automatically checks value.
+
+2. Common interfaces:
+Consumer - allows processing some data and converting it to another object
+DeafConsumer - allows only generating new value without source object
+
+3. Utilitary static classes:
+Equaling - utils for smart and safe comparing objects. No NPE, no errors, flex interface.
+Functional - more functional tricks. Provides select and map methods.
+Nullable - smart and safe checks for null value. Allows to execute different Consumers if value is null
+and if value is not null. Provides methods for collections - firstOrDefault and lastOrDefault.
+
+v. 0.0.2 (Bermuda) - improvements, magic, tables!
+1. Table type - complex object, contains table structure. Allows "torn matrices". Works fast and safe.
+2. New interfaces:
+VoidConsumer - eats data, but does not return anything.
+Loop - controller of loop. Allows skip iteration, break loop or continue processing.
+Selector - consumer, created for functional utils. Creates value based on source object. Has access to Loop.
+Stream - big, smart and very tasty interface for functional programming. Analog of Java Stream API, but more functional
+
+3. Implementations. New package.
+DefaultLoop - simple implementation of Loop interface. Used in utils.
+DefaultStream - simple implementation of Stream based on List<T> collection. Powerful, fase, safe. But you can do better.
+
+4. Improvements:
+Nullable.checkAllNotNull for arrays! Check array and it's content for null values.
+Functional select and map: simplified, rewritten with Stream.
+Functional createStream and createJoinedStream for simple generating Stream of strange values.
