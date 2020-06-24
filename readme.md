@@ -5,6 +5,7 @@ We use this tools for increasing speed of development, for keep code clean and s
 Utils are updated regularly by Projector development team. If you have an idea, you can state it by creating an issue.  
 This project is open source, so after discussing and approving the requirements for the innovation, we can start working together to improve the utilities.  
 Our main rule is 3S: safety, security and stability. Write good tests, check your code perfomance and keep it simple [stupid].
+JavaDoc is available on Github Pages: [Utils 0.0.2 docs](https://projector-solutions.github.io/docs/utils/index.html?overview-summary.html "Utils 0.0.2 JavaDoc").
 
 # Using
 You can use this tools by dependency for Gradle or Maven.
