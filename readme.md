@@ -51,11 +51,11 @@ You don't need to define all of these dependencies, you can take only one.
 Describe repositories url in root gradle.build file:
 ```groovy
 maven {
-    url "https://github.com/KirillBogatikov/MavenArtifacts/raw/master"
+    url "https://github.com/KirillBogatikov/maven-public/raw/master"
 }
 
 maven {
-    url "https://github.com/Magic-Library/maven-repository/raw/master"
+    url "https://github.com/Magic-Library/maven-public/raw/master"
 }
 
 maven {
