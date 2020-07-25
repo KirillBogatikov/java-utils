@@ -5,24 +5,23 @@
     <version>0.0.2</version>
     <packaging>pom</packaging>
     <name>Common utils project</name>
-	
-    <repositories>
+	<repositories>
         <repository>
             <id>KirillBogatikov Public</id>
-            <url>https://github.com/KirillBogatikov/maven-public/raw/master</url>
+            <url>https://raw.githubusercontent.com/KirillBogatikov/maven-public/master</url>
         </repository>
         <repository>
-            <id>Magic-Library</id>
-            <url>https://github.com/Magic-Library/maven-public/raw/master</url>
+            <id>Magic Library</id>
+            <url>https://raw.githubusercontent.com/Magic-Library/maven-public/master</url>
         </repository>
         <repository>
-            <id>Public-Projector</id>
-            <url>https://github.com/Projector-Solutions/maven-public/raw/master</url>
+            <id>Projector Solutions Public</id>
+            <url>https://raw.githubusercontent.com/Projector-Solutions/maven-public/master</url>
         </repository>
         <repository>
-            <id>Private-Projector</id>
+            <id>Projector Solutions Private</id>
             <!-- PUBLIC URL, BUT PRIVATE ACCESS :) -->
-            <url>https://github.com/Projector-Solutions/maven-private/raw/master</url>
+            <url>https://raw.githubusercontent.com/Projector-Solutions/maven-private/master</url>
         </repository>
     </repositories>
     <properties>
@@ -114,5 +113,6 @@
     	<module>nullable</module>
     	<module>common</module>
     	<module>functional</module>
+    	<module>csv</module>
     </modules>
 </project>
