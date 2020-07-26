@@ -30,3 +30,11 @@ DefaultStream - simple implementation of Stream based on List<T> collection. Pow
 Nullable.checkAllNotNull for arrays! Check array and it's content for null values.
 Functional select and map: simplified, rewritten with Stream.
 Functional createStream and createJoinedStream for simple generating Stream of strange values.
+
+v. 0.0.3 (Camel) - DSV tables, String joining and safety
+1. DSV - Delimiter Separated Values
+Data structure based of CSV (comma separated values, RFC 4180).
+Now project contains tools for reading and writing DSV to file or stream. See org.projector.dsv package.
+
+2. String Joiner - CharSequence implementation for simple joining strings with specified delimiter.
+Projector's String Joiner is a analog of java.util.StringJoiner class for platforms without this class (i.e. Android OS).
