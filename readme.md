@@ -1,11 +1,11 @@
 # Overview
 ### Projector Solutions Utils
-This repository contains all public utils, used in Projector's products.  
-We use this tools for increasing speed of development, for keep code clean and simple and to decrease duplications.  
-Utils are updated regularly by Projector development team. If you have an idea, you can state it by creating an issue.  
-This project is open source, so after discussing and approving the requirements for the innovation, we can start working together to improve the utilities.  
+This repository contains all public utils, used in Projector's products.
+We use this tools for increasing speed of development, for keep code clean and simple and to decrease duplications.
+Utils are updated regularly by Projector development team. If you have an idea, you can state it by creating an issue.
+This project is open source, so after discussing and approving the requirements for the innovation, we can start working together to improve the utilities.
 Our main rule is 3S: safety, security and stability. Write good tests, check your code perfomance and keep it simple [stupid].
-JavaDoc is available on Github Pages: [Utils 0.0.2 docs](https://projector-solutions.github.io/docs/utils/index.html?overview-summary.html "Utils 0.0.2 JavaDoc").
+JavaDoc is available on Github Pages: [Utils 0.0.3 docs](https://projector-solutions.github.io/docs/utils/index.html?overview-summary.html "Utils 0.0.3 JavaDoc").
 
 # Using
 You can use this tools by dependency for Gradle or Maven.
@@ -15,59 +15,59 @@ At first, describe connection to our public maven repository, located at Github 
 <repositories>
     <repository>
         <id>KirillBogatikov Public</id>
-        <url>https://github.com/KirillBogatikov/maven-public/raw/master</url>
+        <url>https://raw.githubusercontent.com/KirillBogatikov/maven-public/raw/master</url>
     </repository>
     <repository>
         <id>Magic-Library</id>
-        <url>https://github.com/Magic-Library/maven-public/raw/master</url>
+        <url>https://raw.githubusercontent.com/Magic-Library/maven-public/raw/master</url>
     </repository>
     <repository>
         <id>Public-Projector</id>
-        <url>https://github.com/Projector-Solutions/maven-public/raw/master</url>
+        <url>https://raw.githubusercontent.com/Projector-Solutions/maven-public/raw/master</url>
     </repository>
 </repositories>
-```  
-You can describe it at once in maven config or parent project pom.xml.  
-Then, add dependencies to necessary tools:  
+```
+You can describe it at once in maven config or parent project pom.xml.
+Then, add dependencies to necessary tools:
 ```xml
 <dependency>
     <groupId>org.projector.utils</groupId>
     <artifactId>common</artifactId>
-    <version>0.0.2</version>
+    <version>0.0.3</version>
 </dependency>
 <dependency>
   	<groupId>org.projector.utils</groupId>
    	<artifactId>functional</artifactId>
-   	<version>0.0.2</version>
+   	<version>0.0.3</version>
 </dependency>
 <dependency>
   	<groupId>org.projector.utils</groupId>
    	<artifactId>nullable</artifactId>
-   	<version>0.0.2</version>
+   	<version>0.0.3</version>
 </dependency>
-```  
-You don't need to define all of these dependencies, you can take only one.  
+```
+You don't need to define all of these dependencies, you can take only one.
 ## Gradle
 Describe repositories url in root gradle.build file:
 ```groovy
 maven {
-    url "https://github.com/KirillBogatikov/maven-public/raw/master"
+    url "https://raw.githubusercontent.com/KirillBogatikov/maven-public/raw/master"
 }
 
 maven {
-    url "https://github.com/Magic-Library/maven-public/raw/master"
+    url "https://raw.githubusercontent.com/Magic-Library/maven-public/raw/master"
 }
 
 maven {
-    url "https://github.com/Projector-Solutions/maven-public/raw/master"
+    url "https://raw.githubusercontent.com/Projector-Solutions/maven-public/raw/master"
 }
-```  
-Now you can define dependencies. Remember, you should define all dependencies, necessary for your modules.  
+```
+Now you can define dependencies. Remember, you should define all dependencies, necessary for your modules.
 ```groovy
-implementation "org.projector.utils:common:0.0.2"
-implementation "org.projector.utils:functional:0.0.2"
-implementation "org.projector.utils:nullable:0.0.2"
-```  
+implementation "org.projector.utils:common:0.0.3"
+implementation "org.projector.utils:functional:0.0.3"
+implementation "org.projector.utils:nullable:0.0.3"
+```
 # Changelog
 ## v. 0.0.1 (Argali) - first stable release
 #### 1. Utilitary types:
@@ -101,3 +101,10 @@ and if value is not null. Provides methods for collections - firstOrDefault and 
 - Nullable checkAllNotNull for arrays! Check array and it's content for null values.
 - Functional select and map: simplified, rewritten with Stream.
 - Functional createStream and createJoinedStream for simple generating Stream of strange values.
+
+## v. 0.0.3 (Camel) - DSV tables, String joining and safety
+#### 1. DSV - Delimiter Separated Values
+Data structure based of CSV (comma separated values, RFC 4180).
+Now project contains tools for reading and writing DSV to file or stream. See org.projector.dsv package.
+#### 2. String Joiner - CharSequence implementation for simple joining strings with specified delimiter.
+Projector's String Joiner is a analog of java.util.StringJoiner class for platforms without this class (i.e. Android OS).
