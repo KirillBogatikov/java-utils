@@ -12,7 +12,7 @@ import org.junit.Test;
 public class FunctionalTest {
     @Test
     public void testMap() {
-        Integer[] array = new Integer[]{ 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 };
+        Integer[] array = new Integer[] { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 };
         Map<String, Integer> map = Functional.map((v, l) -> String.valueOf(10 - v), array);
 
         for (Integer v : array) {
@@ -24,22 +24,23 @@ public class FunctionalTest {
 
     @Test(expected = NullPointerException.class)
     public void testNullMapper() {
-        Integer[] array = new Integer[]{ 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 };
+        Integer[] array = new Integer[] { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 };
         @SuppressWarnings("unused")
-		Map<String, Integer> map = Functional.map(null, array);
+        Map<String, Integer> map = Functional.map(null, array);
     }
 
     @Test(expected = NullPointerException.class)
     public void testMapNullArray() {
         Integer[] array = null;
         @SuppressWarnings("unused")
-		Map<String, Integer> map = Functional.map((v, l) -> String.valueOf(10 - v), array);
+        Map<String, Integer> map = Functional.map((v, l) -> String.valueOf(10 - v), array);
     }
 
     @Test
     public void testSelect() {
-        Integer[] array = new Integer[]{ 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 };
+        Integer[] array = new Integer[] { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 };
         List<Integer> result = Functional.select((v, l) -> (v + 10) * 20, array);
+
         for (int i = 0; i < array.length; i++) {
             Integer e = (array[i] + 10) * 20;
             assertEquals(e, result.get(i));
@@ -48,22 +49,23 @@ public class FunctionalTest {
 
     @Test(expected = NullPointerException.class)
     public void testNullSelector() {
-    	Integer[] array = new Integer[]{ 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 };
+        Integer[] array = new Integer[] { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 };
         @SuppressWarnings("unused")
-		List<Integer> result = Functional.select(null, array);
+        List<Integer> result = Functional.select(null, array);
     }
 
     @Test(expected = NullPointerException.class)
     public void testSelectNullArray() {
         Integer[] array = null;
         @SuppressWarnings("unused")
-		List<Integer> result = Functional.select((v, l) -> (v + 10) * 20, array);
+        List<Integer> result = Functional.select((v, l) -> (v + 10) * 20, array);
     }
 
     @Test
     public void testSelectLoop() {
-        Integer[] array = new Integer[]{ 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 };
+        Integer[] array = new Integer[] { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 };
         List<Integer> result = Functional.select((v, l) -> {
+
             if (l.index() == 5) {
                 l.skip();
                 return -1;
@@ -92,8 +94,9 @@ public class FunctionalTest {
 
     @Test
     public void testMapLoop() {
-        Integer[] array = new Integer[]{ 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 };
+        Integer[] array = new Integer[] { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 };
         Map<String, Integer> result = Functional.map((v, l) -> {
+
             if (l.index() == 5) {
                 l.skip();
                 return "";

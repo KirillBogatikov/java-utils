@@ -34,7 +34,7 @@ public class Equaling {
     }
 
     @SafeVarargs
-	public static <T> boolean equalsArrays(T[]... arrays) {
+    public static <T> boolean equalsArrays(T[]... arrays) {
         if (arrays.length < 2) {
             return true;
         }
@@ -43,8 +43,7 @@ public class Equaling {
         for (int i = 1; i < arrays.length; i++) {
             T[] current = arrays[i];
 
-            if ((first == null && current == null) ||
-                Arrays.equals(first, current)) {
+            if ((first == null && current == null) || Arrays.equals(first, current)) {
                 continue;
             }
 

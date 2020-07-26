@@ -20,15 +20,15 @@ public class DefaultLoop implements Loop {
         return index;
     }
 
-	public void setIndex(int index) {
-		this.index = index;
-	}
+    public void setIndex(int index) {
+        this.index = index;
+    }
 
-	public int getAction() {
-		return action;
-	}
+    public int getAction() {
+        return action;
+    }
 
-	public void setAction(int action) {
-		this.action = action;
-	}
+    public void setAction(int action) {
+        this.action = action;
+    }
 }

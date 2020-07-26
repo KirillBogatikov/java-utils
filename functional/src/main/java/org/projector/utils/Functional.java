@@ -16,33 +16,33 @@ import org.projector.interfaces.Stream;
 public class Functional {
 
     @SafeVarargs
-	public static <K, V> Map<K, V> map(Selector<V, K> selector, V... values) {
-    	return createStream(values).map(selector);
+    public static <K, V> Map<K, V> map(Selector<V, K> selector, V... values) {
+        return createStream(values).map(selector);
     }
 
     @SafeVarargs
-	public static <V, O> List<O> select(Selector<V, O> selector, V... values) {
-        return createStream(values)
-    		.select(selector)
-    		.toList();
+    public static <V, O> List<O> select(Selector<V, O> selector, V... values) {
+        return createStream(values).select(selector).toList();
     }
-    
+
     @SafeVarargs
-	public static <T> Stream<T> createStream(T... values) {
-    	checkNotNull(values, "Values array", "can not be null, but can be empty");
-        
-    	ArrayList<T> list = new ArrayList<>(Arrays.asList(values));
-    	return new DefaultStream<>(list);
+    public static <T> Stream<T> createStream(T... values) {
+        checkNotNull(values, "Values array", "can not be null, but can be empty");
+
+        ArrayList<T> list = new ArrayList<>(Arrays.asList(values));
+        return new DefaultStream<>(list);
     }
-    
+
     @SafeVarargs
-	public static <T> Stream<T> createJoinedStream(Collection<T>... parts) {
-    	checkAllNotNull(parts, "Parts");
-    	
-    	ArrayList<T> list = new ArrayList<>();
-    	for (Collection<T> c : parts) {
-    		list.addAll(c);
-    	}    	
-    	return new DefaultStream<T>(list);
+    public static <T> Stream<T> createJoinedStream(Collection<T>... parts) {
+        checkAllNotNull(parts, "Parts");
+
+        ArrayList<T> list = new ArrayList<>();
+
+        for (Collection<T> c : parts) {
+            list.addAll(c);
+        }
+
+        return new DefaultStream<T>(list);
     }
 }
