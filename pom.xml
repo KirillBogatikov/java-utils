@@ -53,18 +53,18 @@
                     </execution>
                 </executions>
             </plugin>
-            <plugin> 
+            <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-javadoc-plugin</artifactId> 
-                <executions> 
-                    <execution> 
+                <artifactId>maven-javadoc-plugin</artifactId>
+                <executions>
+                    <execution>
                         <id>attach-javadocs</id>
                         <phase>deploy</phase>
                         <goals>
                             <goal>jar</goal>
-                        </goals> 
-                    </execution> 
-                </executions> 
+                        </goals>
+                    </execution>
+                </executions>
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -113,6 +113,6 @@
     	<module>nullable</module>
     	<module>common</module>
     	<module>functional</module>
-    	<module>csv</module>
+    	<module>dsv</module>
     </modules>
 </project>
