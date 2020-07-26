@@ -25,7 +25,7 @@ public class DsvWriter {
 
     public void setSerializer(DsvSerializer serializer) {
         if (serializer == null) {
-            this.serializer = new StringJoinerSerializer(",");
+            this.serializer = new SimpleSerializer(SimpleSerializer.COMMA);
         } else {
             this.serializer = serializer;
         }

@@ -4,11 +4,11 @@ import static org.junit.Assert.assertEquals;
 
 import org.junit.Test;
 
-public class StringJoinerSerializerTest {
+public class SimpleSerializerTest {
     @Test
     public void testEmptyTable() {
         DsvTable table = new DsvTable();
-        StringJoinerSerializer s = new StringJoinerSerializer(";");
+        SimpleSerializer s = new SimpleSerializer(SimpleSerializer.SEMICOLON);
         assertEquals("", s.serialize(table));
     }
 
@@ -26,7 +26,7 @@ public class StringJoinerSerializerTest {
         table.addCell(2, 1).setString("Привет");
         table.addCell(2, 2).setString("Russian");
 
-        StringJoinerSerializer s = new StringJoinerSerializer(";");
+        SimpleSerializer s = new SimpleSerializer(SimpleSerializer.SEMICOLON);
         String expected = "1;Hello;English\r\n"
                         + "2;Hola;Espanol\r\n"
                         + "3;Привет;Russian";
@@ -50,7 +50,7 @@ public class StringJoinerSerializerTest {
         table.addCell(2, 3).setString("Доброе утро");
         table.addCell(2, 4).setString("Russian");
 
-        StringJoinerSerializer s = new StringJoinerSerializer(";");
+        SimpleSerializer s = new SimpleSerializer(SimpleSerializer.SEMICOLON);
         String expected = "1;;Hello;;English\r\n"
                         + "2;Buenas noches;Hola;;Espanol\r\n"
                         + "3;Добрый вечер;Привет;Доброе утро;Russian";
@@ -67,7 +67,7 @@ public class StringJoinerSerializerTest {
         table.addCell(0, 3).setString("Semi;colon");
         table.addCell(0, 4).setString("Com,ma");
 
-        StringJoinerSerializer s = new StringJoinerSerializer(";");
+        SimpleSerializer s = new SimpleSerializer(SimpleSerializer.SEMICOLON);
         String expected = "1;\"Line\r\nbreak\";\"Double\"\"quote\";\"Semi;colon\";\"Com,ma\"";
         assertEquals(expected, s.serialize(table));
     }

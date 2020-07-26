@@ -2,13 +2,13 @@ package org.projector.dsv;
 
 import org.projector.utils.StringJoiner;
 
-public class StringJoinerSerializer implements DsvSerializer {
-    public static final String COMMA = ",", TAB = "\t", SEMICOLON = ";";
+public class SimpleSerializer implements DsvSerializer {
+    public static final char COMMA = ',', TAB = '\t', SEMICOLON = ';';
 
-    private String delimiter;
+    private char delimiter;
 
-    public StringJoinerSerializer(String delimiter) {
-        if (delimiter.matches("[\r\n\"]+")) {
+    public SimpleSerializer(char delimiter) {
+        if ("\r\n\"".indexOf(delimiter) != -1) {
             throw new IllegalArgumentException(String.format("Delimiter \"%s\" does not allowed", delimiter));
         }
         this.delimiter = delimiter;

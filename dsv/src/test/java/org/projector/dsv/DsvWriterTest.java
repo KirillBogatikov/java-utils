@@ -1,7 +1,7 @@
 package org.projector.dsv;
 
 import static org.junit.Assert.assertEquals;
-import static org.projector.dsv.StringJoinerSerializer.COMMA;
+import static org.projector.dsv.SimpleSerializer.COMMA;
 
 import java.io.IOException;
 import java.io.OutputStream;
@@ -38,7 +38,7 @@ public class DsvWriterTest {
         table.addCell(0, 2).setString("Description");
 
         StringWriter writer = new StringWriter();
-        DsvWriter dsvWriter = new DsvWriter(writer, new StringJoinerSerializer(COMMA));
+        DsvWriter dsvWriter = new DsvWriter(writer, new SimpleSerializer(COMMA));
         dsvWriter.write(table);
 
         assertEquals("#,Name,Description", writer.toString());
@@ -61,7 +61,7 @@ public class DsvWriterTest {
         table.addCell(3, 2).setString("Project manager");
 
         StringWriter writer = new StringWriter();
-        DsvWriter dsvWriter = new DsvWriter(writer, new StringJoinerSerializer(COMMA));
+        DsvWriter dsvWriter = new DsvWriter(writer, new SimpleSerializer(COMMA));
         dsvWriter.write(table);
 
         String expected = "#,Name,Description\r\n"
