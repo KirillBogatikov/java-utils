@@ -26,6 +26,10 @@ public class StringJoiner implements Appendable, CharSequence {
         this(null, delimiter);
     }
 
+    public StringJoiner(char delimiter) {
+        this(null, String.valueOf(delimiter));
+    }
+
     private char[] charsOf(CharSequence sequence) {
         char[] chars = new char[sequence.length()];
         for (int i = 0; i < chars.length; i++) {
