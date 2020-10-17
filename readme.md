@@ -45,6 +45,11 @@ Then, add dependencies to necessary tools:
    	<artifactId>nullable</artifactId>
    	<version>0.0.3</version>
 </dependency>
+<dependency>
+  	<groupId>org.projector.utils</groupId>
+   	<artifactId>dsv</artifactId>
+   	<version>0.0.3</version>
+</dependency>
 ```
 You don't need to define all of these dependencies, you can take only one.
 ## Gradle
@@ -67,6 +72,7 @@ Now you can define dependencies. Remember, you should define all dependencies, n
 implementation "org.projector.utils:common:0.0.3"
 implementation "org.projector.utils:functional:0.0.3"
 implementation "org.projector.utils:nullable:0.0.3"
+implementation "org.projector.utils:dsv:0.0.3"
 ```
 # Changelog
 ## v. 0.0.1 (Argali) - first stable release
