@@ -107,4 +107,17 @@ and if value is not null. Provides methods for collections - firstOrDefault and 
 Data structure based of CSV (comma separated values, RFC 4180).
 Now project contains tools for reading and writing DSV to file or stream. See org.projector.dsv package.
 #### 2. String Joiner - CharSequence implementation for simple joining strings with specified delimiter.
-Projector's String Joiner is a analog of java.util.StringJoiner class for platforms without this class (i.e. Android OS).
+Projector's String Joiner is a analog of java.util.StringJoiner class for platforms without this class (i.e. Android OS).  
+  
+## v. 0.0.4 (Democracy) - IN PROGRESS
+
+## v. 0.0.5 (Even better) - SCHEDULING, January - February 2021
+
+## v. 0.0.6 (Fierce) - ANNOUNCED, May - June 2021
+
+# DEVELOPERS!
+#### Make your code clean and nice. Comments is not required if your code is simple and clear.
+#### Name your branches correctly! For example, branch for issue #6 in milestone "v. 0.0.4" should be named "v004-6" or "v004-6-dsvtable-tostream"
+#### Write good tests! If you can not analyze your code, ask a friend to read changes and find vulnerabilities. WE WRITE TESTS FOR ALL CODE!!!
+#### Run your tests! All tests will be executed before release on different machines and JDKs. Don't pass the responsibility for your code on to other people.
+#### Merge your branches into current dev-branch, such as v0.0.4, v0.0.5, etc. only after pull request! You can not approve request itself. Help to make our project safe and clean - review code, write comments to request, don't merge branches into master :)
