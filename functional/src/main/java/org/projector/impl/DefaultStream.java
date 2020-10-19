@@ -15,10 +15,12 @@ import org.projector.interfaces.Stream;
 import org.projector.interfaces.VoidConsumer;
 import org.projector.types.Duet;
 import org.projector.types.NotNullValue;
+import org.projector.utils.Equaling;
 
 public class DefaultStream<ValueType> implements Stream<ValueType> {
     private List<ValueType> values;
     private Iterator<ValueType> iterator;
+    private boolean mutable;
 
     public DefaultStream(List<ValueType> values) {
         checkNotNull(values, "Values list");
@@ -27,6 +29,32 @@ public class DefaultStream<ValueType> implements Stream<ValueType> {
         this.iterator = values.iterator();
     }
 
+    @Override
+    public boolean isMutable() {
+    	return mutable;
+    }
+    
+    @Override
+    public void setMutable(boolean mutable) {
+    	this.mutable = mutable;
+    }
+    
+    @Override
+    public ValueType remove(int index) {
+    	return values.remove(index);
+    }
+    
+    @Override
+    public boolean remove(int index, ValueType value) {
+    	ValueType valueAtIndex = values.get(index);
+    	if (Equaling.equals(value, valueAtIndex)) {
+    		values.remove(index);
+    		return true;
+    	}
+    	
+    	return false;
+    }
+    
     @Override
     public ValueType next() {
         return iterator.next();
