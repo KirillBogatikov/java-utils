@@ -3,6 +3,7 @@ package org.projector.impl;
 import static org.projector.utils.Nullable.checkNotNull;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -15,18 +16,76 @@ import org.projector.interfaces.Stream;
 import org.projector.interfaces.VoidConsumer;
 import org.projector.types.Duet;
 import org.projector.types.NotNullValue;
+import org.projector.utils.Equaling;
 
 public class DefaultStream<ValueType> implements Stream<ValueType> {
     private List<ValueType> values;
     private Iterator<ValueType> iterator;
+    private boolean mutable;
 
     public DefaultStream(List<ValueType> values) {
-        checkNotNull(values, "Values list");
-
-        this.values = values;
+    	checkNotNull(values, "Values list");
+    	construct(values, false);
+    }
+    
+    public DefaultStream(List<ValueType> values, boolean mutable) {
+    	checkNotNull(values, "Values list");
+    	construct(values, mutable);
+    }
+    
+    @SafeVarargs
+	public DefaultStream(ValueType... values) {
+    	checkNotNull(values, "Stream values");
+    	construct(Arrays.asList(values), false);
+    }
+    
+    private void construct(List<ValueType> values, boolean mutable) {
+        this.values = new ArrayList<>();
+        this.values.addAll(values);
+        
         this.iterator = values.iterator();
+        this.mutable = mutable;
     }
 
+    @Override
+    public boolean isMutable() {
+    	return mutable;
+    }
+    
+    @Override
+    public void setMutable(boolean mutable) {
+    	this.mutable = mutable;
+    }
+    
+    @Override
+    public ValueType remove(int index) {
+    	checkMutable();
+    	ValueType value = values.remove(index);
+    	iterator = values.iterator();
+    	return value;
+    }
+    
+    @Override
+    public boolean remove(int index, ValueType value) {
+    	checkMutable();
+    	ValueType valueAtIndex = values.get(index);
+    	if (Equaling.equals(value, valueAtIndex)) {
+    		values.remove(index);
+        	iterator = values.iterator();
+    		return true;
+    	}
+    	
+    	return false;
+    }
+    
+    private void checkMutable() {
+    	if (mutable) {
+    		return;
+    	}
+    	
+    	throw new IllegalStateException("Stream is immutable");
+    }
+    
     @Override
     public ValueType next() {
         return iterator.next();
