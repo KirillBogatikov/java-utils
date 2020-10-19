@@ -42,4 +42,12 @@ public interface Stream<ValueType> {
     public Double min(Consumer<ValueType, Double> consumer);
 
     public List<ValueType> toList();
+    
+    public boolean isMutable();
+    
+    public void setMutable(boolean mutable);
+    
+    public ValueType remove(int index);
+    
+    public boolean remove(int index, ValueType value);
 }
