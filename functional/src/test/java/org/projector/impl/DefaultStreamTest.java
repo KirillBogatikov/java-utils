@@ -4,6 +4,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
@@ -17,7 +18,7 @@ import org.projector.interfaces.Stream;
 public class DefaultStreamTest {
     @Test
     public void testNext() {
-        DefaultStream<String> stream = new DefaultStream<>(Arrays.asList("Hello", "world", "man"));
+        DefaultStream<String> stream = new DefaultStream<>("Hello", "world", "man");
         assertEquals("Hello", stream.next());
         assertEquals("world", stream.next());
         assertEquals("man", stream.next());
@@ -31,7 +32,7 @@ public class DefaultStreamTest {
 
     @Test
     public void testHasNext() {
-        DefaultStream<String> stream = new DefaultStream<>(Arrays.asList("Hello", "world", "man"));
+        DefaultStream<String> stream = new DefaultStream<>("Hello", "world", "man");
 
         stream.next();
         assertTrue(stream.hasNext());
@@ -76,7 +77,7 @@ public class DefaultStreamTest {
         stream.foreach(s -> {
             int i = counter.getAndIncrement();
             String v = list.get(i);
-            assertEquals(v, s);
+            assertEquals(v + "/" + v, s);
         });
     }
 
@@ -182,55 +183,130 @@ public class DefaultStreamTest {
 
     @Test
     public void testAny() {
-        DefaultStream<String> stream = new DefaultStream<>(Arrays.asList("Hello", "world", "man"));
+        DefaultStream<String> stream = new DefaultStream<>("Hello", "world", "man");
         assertTrue(stream.any(s -> s.equals("man")));
         assertFalse(stream.any(s -> s.equals("lol")));
     }
 
     @Test
     public void testAll() {
-        DefaultStream<Integer> stream = new DefaultStream<>(Arrays.asList(17, 162, 15, 12, 87, 40, 13, 23));
+        DefaultStream<Integer> stream = new DefaultStream<>(17, 162, 15, 12, 87, 40, 13, 23);
         assertTrue(stream.all(s -> s > 10));
         assertFalse(stream.all(s -> s < 162));
     }
 
     @Test
     public void testSum() {
-        DefaultStream<Integer> intStream = new DefaultStream<>(Arrays.asList(10, 20, 30, 40, 50));
+        DefaultStream<Integer> intStream = new DefaultStream<>(10, 20, 30, 40, 50);
         Integer intExpected = 150;
         assertEquals(intExpected, intStream.sumInt(v -> v));
 
-        DefaultStream<Float> floatStream = new DefaultStream<>(Arrays.asList(1.5f, 2.25f, 3.35f));
+        DefaultStream<Float> floatStream = new DefaultStream<>(1.5f, 2.25f, 3.35f);
         Float floatExpected = 7.1f;
         assertEquals(floatExpected, floatStream.sumFloat(v -> v));
 
-        DefaultStream<Double> doubleStream = new DefaultStream<>(Arrays.asList(1.5, 2.25, 3.35));
+        DefaultStream<Double> doubleStream = new DefaultStream<>(1.5, 2.25, 3.35);
         Double doubleExpected = 7.1;
         assertEquals(doubleExpected, doubleStream.sumDouble(v -> v));
 
-        DefaultStream<Long> longStream = new DefaultStream<>(Arrays.asList(1753L, 213L, 371089L));
+        DefaultStream<Long> longStream = new DefaultStream<>(1753L, 213L, 371089L);
         Long longExpected = 373055L;
         assertEquals(longExpected, longStream.sumLong(v -> v));
     }
 
     @Test
     public void testAverage() {
-        DefaultStream<Integer> intStream = new DefaultStream<>(Arrays.asList(10, 20, 30, 40, 50));
+        DefaultStream<Integer> intStream = new DefaultStream<>(10, 20, 30, 40, 50);
         Double expected = 30.0;
         assertEquals(expected, intStream.average(v -> v.doubleValue()));
     }
 
     @Test
     public void testMin() {
-        DefaultStream<Integer> intStream = new DefaultStream<>(Arrays.asList(10, 20, 30, 40, 50, 7, 150));
+        DefaultStream<Integer> intStream = new DefaultStream<>(10, 20, 30, 40, 50, 7, 150);
         Double expected = 7.0;
         assertEquals(expected, intStream.min(v -> v.doubleValue()));
     }
 
     @Test
     public void testMax() {
-        DefaultStream<Integer> intStream = new DefaultStream<>(Arrays.asList(10, 20, 150, 30, 40, 50, 7));
+        DefaultStream<Integer> intStream = new DefaultStream<>(10, 20, 150, 30, 40, 50, 7);
         Double expected = 150.0;
         assertEquals(expected, intStream.max(v -> v.doubleValue()));
+    }
+    
+    @Test
+    public void testVarArgsConstructor() {
+    	int[] array = new int[] { 10, 20, 150, 30, 40, 50, 7 };
+    	DefaultStream<Integer> intStream = new DefaultStream<>(10, 20, 150, 30, 40, 50, 7);
+		for (Integer expected : array) {
+			assertEquals(expected, intStream.next());
+		}
+    }
+    
+    @Test
+    public void testListConstructor() {
+    	List<Integer> list = new ArrayList<>();
+    	list.addAll(Arrays.asList(10, 20, 150, 30, 40, 50, 7));
+    	
+    	DefaultStream<Integer> intStream = new DefaultStream<>(list);
+		for (int i = 0; i < list.size(); i++) {
+			assertEquals(list.get(i), intStream.next());
+		}
+    }
+    
+    @Test
+    public void testIsMutable() {
+    	DefaultStream<Integer> mutableStream = new DefaultStream<>(Arrays.asList(11, 12, 13), true);
+		assertTrue(mutableStream.isMutable());
+		
+		DefaultStream<Integer> immutableStream = new DefaultStream<>(Arrays.asList(11, 12, 13), false);
+		assertFalse(immutableStream.isMutable());
+		
+		mutableStream.setMutable(false);
+		assertFalse(mutableStream.isMutable());
+		
+		immutableStream.setMutable(true);
+		assertTrue(immutableStream.isMutable());
+    }
+    
+    @Test(expected = IllegalStateException.class)
+    public void testRemoveByIndexFail() {
+    	DefaultStream<Integer> mutableStream = new DefaultStream<>(Arrays.asList(11, 12, 13), false);
+    	mutableStream.remove(0);
+    }
+    
+    @Test(expected = IllegalStateException.class)
+    public void testRemoveByValueFail() {
+    	DefaultStream<Integer> mutableStream = new DefaultStream<>(Arrays.asList(11, 12, 13), false);
+    	mutableStream.remove(0, 11);
+    }
+    
+    @Test
+    public void testRemoveByIndex() {
+    	DefaultStream<Integer> mutableStream = new DefaultStream<>(Arrays.asList(11, 12, 13), true);
+    	mutableStream.remove(1);
+    	
+    	assertEquals((Integer)11, mutableStream.next());
+    	assertEquals((Integer)13, mutableStream.next());
+    }
+    
+    @Test
+    public void testRemoveByValue() {
+    	DefaultStream<Integer> mutableStream = new DefaultStream<>(Arrays.asList(11, 12, 13), true);
+    	assertTrue(mutableStream.remove(1, 12));
+    	
+    	assertEquals((Integer)11, mutableStream.next());
+    	assertEquals((Integer)13, mutableStream.next());
+    }
+    
+    @Test
+    public void testRemoveNoValue() {
+    	DefaultStream<Integer> mutableStream = new DefaultStream<>(Arrays.asList(11, 12, 13), true);
+    	assertFalse(mutableStream.remove(1, 15));
+    	
+    	assertEquals((Integer)11, mutableStream.next());
+    	assertEquals((Integer)12, mutableStream.next());
+    	assertEquals((Integer)13, mutableStream.next());
     }
 }
