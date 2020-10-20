@@ -9,6 +9,30 @@ import org.projector.interfaces.StreamIterator;
 
 public class DefaultStreamIteratorTest {
     @Test
+    public void testHasNextOverLength() {
+        DefaultStream<String> stream = new DefaultStream<>("Hello", "world", "man");
+        stream.setMutable(false);
+        
+        StreamIterator<String> iterator = stream.iterate();
+        for (int i = 0; i < 3; i++) {
+            iterator.next();
+        }
+        assertFalse(iterator.hasNext());
+    }
+    
+    @Test
+    public void testNextOverLength() {
+        DefaultStream<String> stream = new DefaultStream<>("Hello", "world", "man");
+        stream.setMutable(false);
+        
+        StreamIterator<String> iterator = stream.iterate();
+        for (int i = 0; i < 3; i++) {
+            iterator.next();
+        }
+        assertEquals(null, iterator.next());
+    }
+    
+    @Test
     public void testNextSingleIterator() {
         DefaultStream<String> stream = new DefaultStream<>("Hello", "world", "man");
         stream.setMutable(false);

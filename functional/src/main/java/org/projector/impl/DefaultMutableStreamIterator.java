@@ -22,10 +22,9 @@ public class DefaultMutableStreamIterator<ValueType> extends DefaultStreamIterat
 
     @Override
     public void clear() {
-        int i = 0;
         try {
             while(true) {
-                stream.remove(i++);
+                stream.remove(0);
             }
         } catch(NoSuchElementException e) {}
     }
