@@ -8,6 +8,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.NoSuchElementException;
 
 import org.projector.interfaces.Consumer;
 import org.projector.interfaces.Selector;
@@ -107,7 +108,10 @@ public class DefaultStream<ValueType> implements Stream<ValueType> {
     
     private void checkIndex(int index) {
         if (index >= values.size()) {
-            throw new IllegalArgumentException(String.format("Stream has not element at %d index", index));
+            throw new NoSuchElementException(String.format("Stream has not element at %d index", index));
+        }
+        if (index < 0) {
+            throw new NoSuchElementException(String.format("Index can not be negative (but was %d)", index));
         }
     }
     

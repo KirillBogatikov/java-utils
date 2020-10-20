@@ -1,5 +1,7 @@
 package org.projector.impl;
 
+import java.util.NoSuchElementException;
+
 import org.projector.interfaces.MutableStreamIterator;
 import org.projector.interfaces.Stream;
 
@@ -12,7 +14,7 @@ public class DefaultMutableStreamIterator<ValueType> extends DefaultStreamIterat
     public boolean remove() {
         try {
             stream.remove(index--);
-        } catch(IllegalStateException e) {
+        } catch(NoSuchElementException e) {
             return false;
         }
         return true;
@@ -25,7 +27,7 @@ public class DefaultMutableStreamIterator<ValueType> extends DefaultStreamIterat
             while(true) {
                 stream.remove(i++);
             }
-        } catch(IllegalStateException e) {}
+        } catch(NoSuchElementException e) {}
     }
 
 }
