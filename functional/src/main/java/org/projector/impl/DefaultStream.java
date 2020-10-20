@@ -6,13 +6,13 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
 import org.projector.interfaces.Consumer;
 import org.projector.interfaces.Selector;
 import org.projector.interfaces.Stream;
+import org.projector.interfaces.StreamIterator;
 import org.projector.interfaces.VoidConsumer;
 import org.projector.types.Duet;
 import org.projector.types.NotNullValue;
@@ -20,7 +20,6 @@ import org.projector.utils.Equaling;
 
 public class DefaultStream<ValueType> implements Stream<ValueType> {
     private List<ValueType> values;
-    private Iterator<ValueType> iterator;
     private boolean mutable;
 
     public DefaultStream(List<ValueType> values) {
@@ -43,8 +42,16 @@ public class DefaultStream<ValueType> implements Stream<ValueType> {
         this.values = new ArrayList<>();
         this.values.addAll(values);
         
-        this.iterator = values.iterator();
         this.mutable = mutable;
+    }
+    
+    @Override
+    @SuppressWarnings("unchecked")
+    public <IteratorType extends StreamIterator<ValueType>> IteratorType iterate() {
+        if (isMutable()) {
+            return (IteratorType) new DefaultMutableStreamIterator<>(this);
+        }
+        return (IteratorType) new DefaultStreamIterator<>(this);
     }
 
     @Override
@@ -59,23 +66,35 @@ public class DefaultStream<ValueType> implements Stream<ValueType> {
     
     @Override
     public ValueType remove(int index) {
+        checkIndex(index);
     	checkMutable();
     	ValueType value = values.remove(index);
-    	iterator = values.iterator();
     	return value;
     }
     
     @Override
     public boolean remove(int index, ValueType value) {
+        checkIndex(index);
     	checkMutable();
     	ValueType valueAtIndex = values.get(index);
     	if (Equaling.equals(value, valueAtIndex)) {
     		values.remove(index);
-        	iterator = values.iterator();
     		return true;
     	}
     	
     	return false;
+    }
+
+    @Override
+    public ValueType get(int index) {
+        checkIndex(index);
+        return values.get(index);
+    }
+
+    @Override
+    public void set(int index, ValueType value) {
+        checkMutable();
+        values.set(index, value);
     }
     
     private void checkMutable() {
@@ -86,16 +105,12 @@ public class DefaultStream<ValueType> implements Stream<ValueType> {
     	throw new IllegalStateException("Stream is immutable");
     }
     
-    @Override
-    public ValueType next() {
-        return iterator.next();
+    private void checkIndex(int index) {
+        if (index >= values.size()) {
+            throw new IllegalArgumentException(String.format("Stream has not element at %d index", index));
+        }
     }
-
-    @Override
-    public boolean hasNext() {
-        return iterator.hasNext();
-    }
-
+    
     @Override
     public void foreach(VoidConsumer<ValueType> consumer) {
         checkNotNull(consumer, "Consumer");
