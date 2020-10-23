@@ -4,6 +4,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import static org.projector.utils.Nullable.checkNotNull;
+import static org.projector.utils.Nullable.checkAllNotNull;
 import static org.projector.utils.Nullable.firstOrDefault;
 import static org.projector.utils.Nullable.ifNotNull;
 import static org.projector.utils.Nullable.ifNull;
@@ -111,5 +112,41 @@ public class NullableTest {
         list = null;
         expected = -200;
         assertEquals(expected, lastOrDefault(list, expected));
+    }
+    
+    @Test
+    public void testValueNameIsNull() {
+        try {
+            checkNotNull(null, null);
+        } catch(NullPointerException e) {
+            assertEquals("Value can not be null", e.getMessage());
+        }
+        
+        try {
+            checkNotNull(null, null, "reason");
+        } catch(NullPointerException e) {
+            assertEquals("Value can not be null: reason", e.getMessage());
+        }
+    }
+    
+    @Test
+    public void testArrayNameIsNull() {
+        try {
+            checkAllNotNull((Object[])null, null, "reason");
+        } catch(NullPointerException e) {
+            assertEquals("Array can not be null: reason", e.getMessage());
+        }
+        
+        try {
+            checkAllNotNull((Object[])null, null);
+        } catch(NullPointerException e) {
+            assertEquals("Array can not be null", e.getMessage());
+        }
+        
+        try {
+            checkAllNotNull(new Object[] { "Kirill", 12, null }, null);
+        } catch(NullPointerException e) {
+            assertEquals("Value in Array at 2 can not be null", e.getMessage());
+        }
     }
 }

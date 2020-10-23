@@ -9,11 +9,19 @@ public class Nullable {
 
     public static void checkNotNull(Object value, String name, String message) {
         if (value == null) {
-            String info = String.format("%s can not be null%s%s", name, message == null ? "" : ": ",
-                    message == null ? "" : message);
+            if (name == null) {
+                name = "Value";
+            }
+            
+            String prefix = ": ";
+            if (message == null) {
+                prefix = "";
+                message = "";
+            }
+                        
+            String info = String.format("%s can not be null%s%s", name, prefix, message);
             throw new NullPointerException(info);
         }
-
     }
 
     public static void checkNotNull(Object value, String name) {
@@ -21,10 +29,14 @@ public class Nullable {
     }
 
     public static void checkAllNotNull(Object[] values, String name, String message) {
-        checkNotNull(values, "Values array", "required for check");
+        if (name == null) {
+            name = "Array";
+        }
+        
+        checkNotNull(values, name, message);
 
         for (int i = 0; i < values.length; i++) {
-            checkNotNull(values[i], String.format("Value at %d", i));
+            checkNotNull(values[i], String.format("Value in %s at %d", name, i));
         }
 
     }
