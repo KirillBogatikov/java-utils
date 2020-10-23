@@ -35,9 +35,13 @@ public interface Stream<ValueType> {
 
     public Double average(Consumer<ValueType, Double> consumer);
 
-    public Double max(Consumer<ValueType, Double> consumer);
+    public ValueType max(Consumer<ValueType, Double> consumer);
 
-    public Double min(Consumer<ValueType, Double> consumer);
+    public ValueType min(Consumer<ValueType, Double> consumer);
+
+    public Duet<ValueType, Double> maxDuet(Consumer<ValueType, Double> consumer);
+
+    public Duet<ValueType, Double> minDuet(Consumer<ValueType, Double> consumer);
 
     public List<ValueType> toList();
     

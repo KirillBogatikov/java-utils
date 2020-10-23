@@ -1,6 +1,7 @@
 package org.projector.impl;
 
 import static org.projector.utils.Nullable.checkNotNull;
+import static org.projector.utils.Nullable.ifNullOrNot;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -10,6 +11,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.NoSuchElementException;
 
+import org.projector.annotations.Nullable;
 import org.projector.interfaces.Consumer;
 import org.projector.interfaces.Selector;
 import org.projector.interfaces.Stream;
@@ -295,33 +297,53 @@ public class DefaultStream<ValueType> implements Stream<ValueType> {
     }
 
     @Override
-    public Double max(Consumer<ValueType, Double> consumer) {
+    public @Nullable Duet<ValueType, Double> maxDuet(Consumer<ValueType, Double> consumer) {
         checkNotNull(consumer, "Consumer");
-        NotNullValue<Double> max = new NotNullValue<>(-Double.MAX_VALUE);
+        if (values.isEmpty()) {
+            return null;
+        }
+                
+        Duet<ValueType, Double> duet = new Duet<ValueType, Double>(null, -Double.MAX_VALUE);
 
         foreach(v -> {
             double result = consumer.consume(v);
-            if (max.get() < result) {
-                max.set(result);
+            if (duet.getB() < result) {
+                duet.setB(result);
+                duet.setA(v);
             }
         });
 
-        return max.get();
+        return duet;
+    }
+    
+    @Override
+    public @Nullable ValueType max(Consumer<ValueType, Double> consumer) {
+        return ifNullOrNot(maxDuet(consumer), () -> null, duet -> duet.getA());
     }
 
     @Override
-    public Double min(Consumer<ValueType, Double> consumer) {
+    public @Nullable Duet<ValueType, Double> minDuet(Consumer<ValueType, Double> consumer) {
         checkNotNull(consumer, "Consumer");
-        NotNullValue<Double> min = new NotNullValue<>(Double.MAX_VALUE);
+        if (values.isEmpty()) {
+            return null;
+        }
+                
+        Duet<ValueType, Double> duet = new Duet<ValueType, Double>(null, Double.MAX_VALUE);
 
         foreach(v -> {
             double result = consumer.consume(v);
-            if (min.get() > result) {
-                min.set(result);
+            if (duet.getB() > result) {
+                duet.setB(result);
+                duet.setA(v);
             }
         });
 
-        return min.get();
+        return duet;
+    }
+    
+    @Override
+    public @Nullable ValueType min(Consumer<ValueType, Double> consumer) {
+        return ifNullOrNot(minDuet(consumer), () -> null, duet -> duet.getA());
     }
 
     @Override
