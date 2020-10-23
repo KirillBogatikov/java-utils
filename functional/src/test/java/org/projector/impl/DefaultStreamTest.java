@@ -13,37 +13,49 @@ import java.util.NoSuchElementException;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import org.junit.Test;
+import org.projector.interfaces.MutableStreamIterator;
 import org.projector.interfaces.Stream;
+import org.projector.interfaces.StreamIterator;
 
 public class DefaultStreamTest {
+    
     @Test
-    public void testNext() {
-        DefaultStream<String> stream = new DefaultStream<>("Hello", "world", "man");
-        assertEquals("Hello", stream.next());
-        assertEquals("world", stream.next());
-        assertEquals("man", stream.next());
+    @SuppressWarnings("unused")
+    public void testIterateImmutableCorrect() {
+        DefaultStream<String> stream = new DefaultStream<>(Collections.emptyList());
+        stream.setMutable(false);
+        StreamIterator<String> immutableIterator = stream.iterate();
+
+        stream.setMutable(true);
+        MutableStreamIterator<String> mutableIterator = stream.iterate();
+    }
+    
+    @Test(expected = ClassCastException.class)
+    @SuppressWarnings("unused")
+    public void testIterateImmutableFail() {
+        DefaultStream<String> stream = new DefaultStream<>(Collections.emptyList());
+        stream.setMutable(false);
+        MutableStreamIterator<String> iterator = stream.iterate();
     }
 
     @Test(expected = NoSuchElementException.class)
-    public void testNextNoSuchElement() {
+    public void testGetNoSuchElementEmpty() {
         DefaultStream<String> stream = new DefaultStream<>(Collections.emptyList());
-        stream.next();
+        stream.get(0);
     }
 
-    @Test
-    public void testHasNext() {
-        DefaultStream<String> stream = new DefaultStream<>("Hello", "world", "man");
-
-        stream.next();
-        assertTrue(stream.hasNext());
-
-        stream.next();
-        assertTrue(stream.hasNext());
-
-        stream.next();
-        assertFalse(stream.hasNext());
+    @Test(expected = NoSuchElementException.class)
+    public void testGetNoSuchElementNegative() {
+        DefaultStream<Integer> stream = new DefaultStream<>(1, 2, 3, 4, 5, 6, 7, 8);
+        stream.get(-4);
     }
 
+    @Test(expected = NoSuchElementException.class)
+    public void testGetNoSuchElementOverLength() {
+        DefaultStream<Integer> stream = new DefaultStream<>(1, 2, 3, 4, 5, 6, 7, 8);
+        stream.get(8);
+    }
+    
     @Test
     public void testForeachVoid() {
         List<String> list = Arrays.asList("Hello", "world", "man");
@@ -237,10 +249,10 @@ public class DefaultStreamTest {
     
     @Test
     public void testVarArgsConstructor() {
-    	int[] array = new int[] { 10, 20, 150, 30, 40, 50, 7 };
+        Integer[] array = new Integer[] { 10, 20, 150, 30, 40, 50, 7 };
     	DefaultStream<Integer> intStream = new DefaultStream<>(10, 20, 150, 30, 40, 50, 7);
-		for (Integer expected : array) {
-			assertEquals(expected, intStream.next());
+		for (int i = 0; i < array.length; i++) {
+			assertEquals(array[i], intStream.get(i));
 		}
     }
     
@@ -250,9 +262,9 @@ public class DefaultStreamTest {
     	list.addAll(Arrays.asList(10, 20, 150, 30, 40, 50, 7));
     	
     	DefaultStream<Integer> intStream = new DefaultStream<>(list);
-		for (int i = 0; i < list.size(); i++) {
-			assertEquals(list.get(i), intStream.next());
-		}
+    	for (int i = 0; i < list.size(); i++) {
+            assertEquals(list.get(i), intStream.get(i));
+        }
     }
     
     @Test
@@ -282,13 +294,25 @@ public class DefaultStreamTest {
     	mutableStream.remove(0, 11);
     }
     
+    @Test(expected = NoSuchElementException.class)
+    public void testRemoveNegativeIndex() {
+        DefaultStream<Integer> mutableStream = new DefaultStream<>(Arrays.asList(11, 12, 13), false);
+        mutableStream.remove(-1);
+    }
+    
+    @Test(expected = NoSuchElementException.class)
+    public void testRemoveOverLength() {
+        DefaultStream<Integer> mutableStream = new DefaultStream<>(Arrays.asList(11, 12, 13), false);
+        mutableStream.remove(4);
+    }      
+    
     @Test
     public void testRemoveByIndex() {
     	DefaultStream<Integer> mutableStream = new DefaultStream<>(Arrays.asList(11, 12, 13), true);
     	mutableStream.remove(1);
     	
-    	assertEquals((Integer)11, mutableStream.next());
-    	assertEquals((Integer)13, mutableStream.next());
+    	assertEquals((Integer)11, mutableStream.get(0));
+    	assertEquals((Integer)13, mutableStream.get(1));
     }
     
     @Test
@@ -296,8 +320,8 @@ public class DefaultStreamTest {
     	DefaultStream<Integer> mutableStream = new DefaultStream<>(Arrays.asList(11, 12, 13), true);
     	assertTrue(mutableStream.remove(1, 12));
     	
-    	assertEquals((Integer)11, mutableStream.next());
-    	assertEquals((Integer)13, mutableStream.next());
+    	assertEquals((Integer)11, mutableStream.get(0));
+    	assertEquals((Integer)13, mutableStream.get(1));
     }
     
     @Test
@@ -305,8 +329,8 @@ public class DefaultStreamTest {
     	DefaultStream<Integer> mutableStream = new DefaultStream<>(Arrays.asList(11, 12, 13), true);
     	assertFalse(mutableStream.remove(1, 15));
     	
-    	assertEquals((Integer)11, mutableStream.next());
-    	assertEquals((Integer)12, mutableStream.next());
-    	assertEquals((Integer)13, mutableStream.next());
+    	assertEquals((Integer)11, mutableStream.get(0));
+    	assertEquals((Integer)12, mutableStream.get(1));
+    	assertEquals((Integer)13, mutableStream.get(2));
     }
 }

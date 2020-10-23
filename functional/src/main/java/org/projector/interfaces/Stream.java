@@ -5,11 +5,9 @@ import java.util.Map;
 
 import org.projector.types.Duet;
 
-public interface Stream<ValueType> {
-    public ValueType next();
-
-    public boolean hasNext();
-
+public interface Stream<ValueType> {    
+    public <IteratorType extends StreamIterator<ValueType>> IteratorType iterate();
+    
     public void foreach(VoidConsumer<ValueType> consumer);
 
     public void foreach(Consumer<ValueType, ValueType> consumer);
@@ -46,6 +44,10 @@ public interface Stream<ValueType> {
     public boolean isMutable();
     
     public void setMutable(boolean mutable);
+    
+    public ValueType get(int index);
+    
+    public void set(int index, ValueType value);
     
     public ValueType remove(int index);
     
