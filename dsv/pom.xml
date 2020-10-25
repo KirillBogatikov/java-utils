@@ -17,5 +17,10 @@
     		<artifactId>nullable</artifactId>
     		<version>${project.version}</version>
     	</dependency>
+        <dependency>
+            <groupId>org.projector.utils</groupId>
+            <artifactId>functional</artifactId>
+            <version>${project.version}</version>
+        </dependency>
     </dependencies>
 </project>
