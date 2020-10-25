@@ -8,6 +8,8 @@ import static org.junit.Assert.assertTrue;
 import java.util.List;
 
 import org.junit.Test;
+import org.projector.dsv.data.DsvCell;
+import org.projector.dsv.data.DsvTable;
 
 public class DsvTableTest {
     @Test

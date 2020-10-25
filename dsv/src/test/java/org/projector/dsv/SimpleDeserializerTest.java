@@ -1,13 +1,15 @@
 package org.projector.dsv;
 
 import static org.junit.Assert.assertEquals;
-import static org.projector.dsv.SimpleSerializer.COMMA;
-import static org.projector.dsv.SimpleSerializer.SEMICOLON;
+import static org.projector.dsv.impl.DefaultSerializer.COMMA;
+import static org.projector.dsv.impl.DefaultSerializer.SEMICOLON;
 
 import java.io.IOException;
 import java.util.ArrayList;
 
 import org.junit.Test;
+import org.projector.dsv.data.DsvTable;
+import org.projector.dsv.impl.DefaultDeserializer;
 
 public class SimpleDeserializerTest {
     @Test
@@ -15,7 +17,7 @@ public class SimpleDeserializerTest {
         ArrayList<String> lines = new ArrayList<>();
         lines.add("");
 
-        DsvDeserializer d = new SimpleDeserializer(COMMA);
+        DsvDeserializer d = new DefaultDeserializer(COMMA);
         DsvTable table = d.deserialize(lines);
 
         assertEquals(0, table.getRowsCount());
@@ -29,7 +31,7 @@ public class SimpleDeserializerTest {
         lines.add("2;Hola;Espanol");
         lines.add("3;Привет;Russian");
 
-        DsvDeserializer d = new SimpleDeserializer(SEMICOLON);
+        DsvDeserializer d = new DefaultDeserializer(SEMICOLON);
         DsvTable table = d.deserialize(lines);
 
         assertEquals(1, table.getCell(0, 0).getInt());
@@ -50,7 +52,7 @@ public class SimpleDeserializerTest {
         ArrayList<String> lines = new ArrayList<>();
         lines.add("#,\"Escaped value\",\"Com,ma\",\"Semi;colon\",\"Line\r\nbreak\",\"Double\"\"quote\"");
 
-        DsvDeserializer d = new SimpleDeserializer(COMMA);
+        DsvDeserializer d = new DefaultDeserializer(COMMA);
         DsvTable table = d.deserialize(lines);
 
         assertEquals(1, table.getRowsCount());

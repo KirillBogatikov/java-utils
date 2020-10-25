@@ -1,42 +1,122 @@
 package org.projector.impl;
 
 import static org.projector.utils.Nullable.checkNotNull;
+import static org.projector.utils.Nullable.ifNullOrNot;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.NoSuchElementException;
 
+import org.projector.annotations.Nullable;
 import org.projector.interfaces.Consumer;
 import org.projector.interfaces.Selector;
 import org.projector.interfaces.Stream;
+import org.projector.interfaces.StreamIterator;
 import org.projector.interfaces.VoidConsumer;
 import org.projector.types.Duet;
 import org.projector.types.NotNullValue;
+import org.projector.utils.Equaling;
 
 public class DefaultStream<ValueType> implements Stream<ValueType> {
     private List<ValueType> values;
-    private Iterator<ValueType> iterator;
+    private boolean mutable;
 
     public DefaultStream(List<ValueType> values) {
-        checkNotNull(values, "Values list");
-
-        this.values = values;
-        this.iterator = values.iterator();
+    	checkNotNull(values, "Values list");
+    	construct(values, false);
+    }
+    
+    public DefaultStream(List<ValueType> values, boolean mutable) {
+    	checkNotNull(values, "Values list");
+    	construct(values, mutable);
+    }
+    
+    @SafeVarargs
+	public DefaultStream(ValueType... values) {
+    	checkNotNull(values, "Stream values");
+    	construct(Arrays.asList(values), false);
+    }
+    
+    private void construct(List<ValueType> values, boolean mutable) {
+        this.values = new ArrayList<>();
+        this.values.addAll(values);
+        
+        this.mutable = mutable;
+    }
+    
+    @Override
+    @SuppressWarnings("unchecked")
+    public <IteratorType extends StreamIterator<ValueType>> IteratorType iterate() {
+        if (isMutable()) {
+            return (IteratorType) new DefaultMutableStreamIterator<>(this);
+        }
+        return (IteratorType) new DefaultStreamIterator<>(this);
     }
 
     @Override
-    public ValueType next() {
-        return iterator.next();
+    public boolean isMutable() {
+    	return mutable;
+    }
+    
+    @Override
+    public void setMutable(boolean mutable) {
+    	this.mutable = mutable;
+    }
+    
+    @Override
+    public ValueType remove(int index) {
+        checkIndex(index);
+    	checkMutable();
+    	ValueType value = values.remove(index);
+    	return value;
+    }
+    
+    @Override
+    public boolean remove(int index, ValueType value) {
+        checkIndex(index);
+    	checkMutable();
+    	ValueType valueAtIndex = values.get(index);
+    	if (Equaling.equals(value, valueAtIndex)) {
+    		values.remove(index);
+    		return true;
+    	}
+    	
+    	return false;
     }
 
     @Override
-    public boolean hasNext() {
-        return iterator.hasNext();
+    public ValueType get(int index) {
+        checkIndex(index);
+        return values.get(index);
     }
 
+    @Override
+    public void set(int index, ValueType value) {
+        checkMutable();
+        values.set(index, value);
+    }
+    
+    private void checkMutable() {
+    	if (mutable) {
+    		return;
+    	}
+    	
+    	throw new IllegalStateException("Stream is immutable");
+    }
+    
+    private void checkIndex(int index) {
+        if (index >= values.size()) {
+            throw new NoSuchElementException(String.format("Stream has not element at %d index", index));
+        }
+        if (index < 0) {
+            throw new NoSuchElementException(String.format("Index can not be negative (but was %d)", index));
+        }
+    }
+    
     @Override
     public void foreach(VoidConsumer<ValueType> consumer) {
         checkNotNull(consumer, "Consumer");
@@ -217,33 +297,53 @@ public class DefaultStream<ValueType> implements Stream<ValueType> {
     }
 
     @Override
-    public Double max(Consumer<ValueType, Double> consumer) {
+    public @Nullable Duet<ValueType, Double> maxDuet(Consumer<ValueType, Double> consumer) {
         checkNotNull(consumer, "Consumer");
-        NotNullValue<Double> max = new NotNullValue<>(-Double.MAX_VALUE);
+        if (values.isEmpty()) {
+            return null;
+        }
+                
+        Duet<ValueType, Double> duet = new Duet<ValueType, Double>(null, -Double.MAX_VALUE);
 
         foreach(v -> {
             double result = consumer.consume(v);
-            if (max.get() < result) {
-                max.set(result);
+            if (duet.getB() < result) {
+                duet.setB(result);
+                duet.setA(v);
             }
         });
 
-        return max.get();
+        return duet;
+    }
+    
+    @Override
+    public @Nullable ValueType max(Consumer<ValueType, Double> consumer) {
+        return ifNullOrNot(maxDuet(consumer), () -> null, duet -> duet.getA());
     }
 
     @Override
-    public Double min(Consumer<ValueType, Double> consumer) {
+    public @Nullable Duet<ValueType, Double> minDuet(Consumer<ValueType, Double> consumer) {
         checkNotNull(consumer, "Consumer");
-        NotNullValue<Double> min = new NotNullValue<>(Double.MAX_VALUE);
+        if (values.isEmpty()) {
+            return null;
+        }
+                
+        Duet<ValueType, Double> duet = new Duet<ValueType, Double>(null, Double.MAX_VALUE);
 
         foreach(v -> {
             double result = consumer.consume(v);
-            if (min.get() > result) {
-                min.set(result);
+            if (duet.getB() > result) {
+                duet.setB(result);
+                duet.setA(v);
             }
         });
 
-        return min.get();
+        return duet;
+    }
+    
+    @Override
+    public @Nullable ValueType min(Consumer<ValueType, Double> consumer) {
+        return ifNullOrNot(minDuet(consumer), () -> null, duet -> duet.getA());
     }
 
     @Override

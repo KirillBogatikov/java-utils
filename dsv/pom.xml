@@ -3,7 +3,7 @@
     <parent>
     	<groupId>org.projector.utils</groupId>
     	<artifactId>parent</artifactId>
-    	<version>0.0.3</version>
+    	<version>0.0.4</version>
     </parent>
     <artifactId>dsv</artifactId>
     <dependencies>
@@ -17,5 +17,10 @@
     		<artifactId>nullable</artifactId>
     		<version>${project.version}</version>
     	</dependency>
+        <dependency>
+            <groupId>org.projector.utils</groupId>
+            <artifactId>functional</artifactId>
+            <version>${project.version}</version>
+        </dependency>
     </dependencies>
 </project>

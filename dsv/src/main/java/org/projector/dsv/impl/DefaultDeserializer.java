@@ -1,13 +1,16 @@
-package org.projector.dsv;
+package org.projector.dsv.impl;
 
 import java.util.List;
 
-public class SimpleDeserializer implements DsvDeserializer {
+import org.projector.dsv.DsvDeserializer;
+import org.projector.dsv.data.DsvTable;
+
+public class DefaultDeserializer implements DsvDeserializer {
     public static final char COMMA = ',', TAB = '\t', SEMICOLON = ';';
 
     private char delimiter;
 
-    public SimpleDeserializer(char delimiter) {
+    public DefaultDeserializer(char delimiter) {
         if ("\r\n\"".indexOf(delimiter) != -1) {
             throw new IllegalArgumentException(String.format("Delimiter \"%s\" does not allowed", delimiter));
         }

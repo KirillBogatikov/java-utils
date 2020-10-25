@@ -38,3 +38,41 @@ Now project contains tools for reading and writing DSV to file or stream. See or
 
 2. String Joiner - CharSequence implementation for simple joining strings with specified delimiter.
 Projector's String Joiner is a analog of java.util.StringJoiner class for platforms without this class (i.e. Android OS).
+
+v. 0.0.4 (Democracy) [IN PROGRESS] - Fixes, improvements, new tests
+1. New Stream aggregate functions. 
+   Stream minDuet() and maxDuet() returns Duet of item and it's double equivalent.
+   Old min() and max() saved, but was refactored.
+2. JUnit vulnerability fix (bump to 4.13.3)
+3. Improved NotNull and Nullable annotations: added new Javadoc information to annotations.
+4. Update in DSV module structure.
+DsvCell moved to org.projector.dsv.data
+DsvTable moved to org.projector.dsv.data
+SimpleDeserializer renamed to DefaultDeserializer and moved to org.projector.dsv.impl
+SimpleSerializer renamed to DefaultSerializer and moved to org.projector.dsv.impl
+Extracted DsvReader and DsvWriter interfaces.
+DsvReader renamed to DefaultDsvReader and moved to org.projector.dsv.impl. Now this class implements DsvReader interface.
+DsvWriter renamed to DefaultDsvWriter and moved to org.projector.dsv.impl. Now this class implements DsvWriter interface.
+5. Added DsvTable toValueStream() and toCellStream() methods. Methods packs all cells or values from cells on each other to stream. For example, table
+Header A | Header B | Header C
+  Anton  |    19    |  Moscow
+  Lizzy  |    24    | New York
+  Mike   |    65    | Hong Kong
+  
+will be packed into stream: (Header A, Header B, Header C, Anton, 19, Moscow, Lizzy, 24, New York, Mike, 65, Hong Kong)
+6. Stream Mutability.
+Now some streams can be mutable by using remove methods. In a future, will be improved methods for adding and replacing values.
+In 0.0.4 was deleted Stream.next(), Stream.hasNext(), added Stream.remove(int), Stream.remove(int, ValueType) and Stream.iterate() methods. 
+Added StreamIterator and MutableStreamIterator interface.
+StreamIterator<I> should has next methods:
+    - hasNext():boolean
+    - next():I
+    - skip(int):void
+MutableStreamIterator<I> extends StreamIterator<I> interface and provides next methods:
+    - remove():void
+    - clear():void
+Stream.iterate() - concurrent but safe method. It can provide millions of iterators, but Stream.remove(int, I), used by
+MutableStreamIterator checks item availability.
+Added Stream.isMutable() and Stream.setMutable(boolean) methods. 
+This methods determine required type of StreamIterator created by Stream.iterate() method.
+7. Fixed bugs in Nullable checks. Previously Nullable.checkAllNotNull did not use specified value name.

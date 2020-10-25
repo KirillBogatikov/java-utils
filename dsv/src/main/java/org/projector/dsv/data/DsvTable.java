@@ -1,4 +1,4 @@
-package org.projector.dsv;
+package org.projector.dsv.data;
 
 import static org.projector.utils.Nullable.ifNullOrNot;
 
@@ -8,6 +8,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.projector.impl.DefaultStream;
+import org.projector.interfaces.Stream;
 import org.projector.types.Duet;
 
 public class DsvTable {
@@ -109,6 +111,21 @@ public class DsvTable {
 
     public int getColumnsCount() {
         return maxColumn;
+    }
+    
+    public Stream<DsvCell> toCellStream() {
+        ArrayList<DsvCell> cellList = new ArrayList<>();
+        for (int i = 0; i < maxRow; i++) {
+            for (int j = 0; j < maxColumn; j++) {
+                cellList.add(cells.get(point(i, j)));
+            }
+        }
+        
+        return new DefaultStream<>(cellList);
+    }
+    
+    public Stream<Object> toValueStream() {
+        return toCellStream().select((cell, loop) -> cell.get(value -> value));
     }
 
     private Duet<Integer, Integer> point(int row, int column) {

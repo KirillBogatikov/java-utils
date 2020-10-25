@@ -5,11 +5,9 @@ import java.util.Map;
 
 import org.projector.types.Duet;
 
-public interface Stream<ValueType> {
-    public ValueType next();
-
-    public boolean hasNext();
-
+public interface Stream<ValueType> {    
+    public <IteratorType extends StreamIterator<ValueType>> IteratorType iterate();
+    
     public void foreach(VoidConsumer<ValueType> consumer);
 
     public void foreach(Consumer<ValueType, ValueType> consumer);
@@ -37,9 +35,25 @@ public interface Stream<ValueType> {
 
     public Double average(Consumer<ValueType, Double> consumer);
 
-    public Double max(Consumer<ValueType, Double> consumer);
+    public ValueType max(Consumer<ValueType, Double> consumer);
 
-    public Double min(Consumer<ValueType, Double> consumer);
+    public ValueType min(Consumer<ValueType, Double> consumer);
+
+    public Duet<ValueType, Double> maxDuet(Consumer<ValueType, Double> consumer);
+
+    public Duet<ValueType, Double> minDuet(Consumer<ValueType, Double> consumer);
 
     public List<ValueType> toList();
+    
+    public boolean isMutable();
+    
+    public void setMutable(boolean mutable);
+    
+    public ValueType get(int index);
+    
+    public void set(int index, ValueType value);
+    
+    public ValueType remove(int index);
+    
+    public boolean remove(int index, ValueType value);
 }
