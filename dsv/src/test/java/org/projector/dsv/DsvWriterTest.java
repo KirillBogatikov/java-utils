@@ -1,7 +1,7 @@
 package org.projector.dsv;
 
 import static org.junit.Assert.assertEquals;
-import static org.projector.dsv.SimpleSerializer.COMMA;
+import static org.projector.dsv.impl.DefaultSerializer.COMMA;
 
 import java.io.IOException;
 import java.io.OutputStream;
@@ -9,24 +9,27 @@ import java.io.StringWriter;
 import java.io.Writer;
 
 import org.junit.Test;
+import org.projector.dsv.data.DsvTable;
+import org.projector.dsv.impl.DefaultSerializer;
+import org.projector.dsv.impl.DefaultWriter;
 
 public class DsvWriterTest {
     @Test(expected = NullPointerException.class)
     public void testNullWriter() {
         Writer w = null;
-        new DsvWriter(w, null);
+        new DefaultWriter(w, null);
     }
 
     @Test(expected = NullPointerException.class)
     public void testNullStream() {
         OutputStream s = null;
-        new DsvWriter(s, null);
+        new DefaultWriter(s, null);
     }
 
     @Test(expected = NullPointerException.class)
     public void testNullTable() throws IOException {
         DsvTable table = null;
-        DsvWriter dsvWriter = new DsvWriter(System.out, null);
+        DefaultWriter dsvWriter = new DefaultWriter(System.out, null);
         dsvWriter.write(table);
     }
 
@@ -38,7 +41,7 @@ public class DsvWriterTest {
         table.addCell(0, 2).setString("Description");
 
         StringWriter writer = new StringWriter();
-        DsvWriter dsvWriter = new DsvWriter(writer, new SimpleSerializer(COMMA));
+        DefaultWriter dsvWriter = new DefaultWriter(writer, new DefaultSerializer(COMMA));
         dsvWriter.write(table);
 
         assertEquals("#,Name,Description", writer.toString());
@@ -61,7 +64,7 @@ public class DsvWriterTest {
         table.addCell(3, 2).setString("Project manager");
 
         StringWriter writer = new StringWriter();
-        DsvWriter dsvWriter = new DsvWriter(writer, new SimpleSerializer(COMMA));
+        DefaultWriter dsvWriter = new DefaultWriter(writer, new DefaultSerializer(COMMA));
         dsvWriter.write(table);
 
         String expected = "#,Name,Description\r\n"

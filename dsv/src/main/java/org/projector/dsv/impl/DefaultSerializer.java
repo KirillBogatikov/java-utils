@@ -1,13 +1,16 @@
-package org.projector.dsv;
+package org.projector.dsv.impl;
 
+import org.projector.dsv.DsvSerializer;
+import org.projector.dsv.data.DsvCell;
+import org.projector.dsv.data.DsvTable;
 import org.projector.utils.StringJoiner;
 
-public class SimpleSerializer implements DsvSerializer {
+public class DefaultSerializer implements DsvSerializer {
     public static final char COMMA = ',', TAB = '\t', SEMICOLON = ';';
 
     private char delimiter;
 
-    public SimpleSerializer(char delimiter) {
+    public DefaultSerializer(char delimiter) {
         if ("\r\n\"".indexOf(delimiter) != -1) {
             throw new IllegalArgumentException(String.format("Delimiter \"%s\" does not allowed", delimiter));
         }
