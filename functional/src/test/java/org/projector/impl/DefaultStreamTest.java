@@ -16,6 +16,7 @@ import org.junit.Test;
 import org.projector.interfaces.MutableStreamIterator;
 import org.projector.interfaces.Stream;
 import org.projector.interfaces.StreamIterator;
+import org.projector.types.Duet;
 
 public class DefaultStreamTest {
     
@@ -236,15 +237,32 @@ public class DefaultStreamTest {
     @Test
     public void testMin() {
         DefaultStream<Integer> intStream = new DefaultStream<>(10, 20, 30, 40, 50, 7, 150);
-        Double expected = 7.0;
-        assertEquals(expected, intStream.min(v -> v.doubleValue()));
+        Integer expected = 7;
+        assertEquals(expected, intStream.min(v -> v.doubleValue() * 8));
     }
+
+    @Test
+    public void testMinDuet() {
+        DefaultStream<Integer> intStream = new DefaultStream<>(10, 20, 30, 40, 50, 7, 150);
+        Duet<Integer, Double> result = intStream.minDuet(v -> v.doubleValue() * 8);
+        assertEquals((Integer)7, result.getA());
+        assertEquals((Double)56.0, result.getB());
+    }
+
 
     @Test
     public void testMax() {
         DefaultStream<Integer> intStream = new DefaultStream<>(10, 20, 150, 30, 40, 50, 7);
-        Double expected = 150.0;
-        assertEquals(expected, intStream.max(v -> v.doubleValue()));
+        Integer expected = 150;
+        assertEquals(expected, intStream.max(v -> v.doubleValue() * 2));
+    }
+
+    @Test
+    public void testMaxDuet() {
+        DefaultStream<Integer> intStream = new DefaultStream<>(10, 20, 30, 40, 50, 7, 150);
+        Duet<Integer, Double> result = intStream.maxDuet(v -> v.doubleValue() * 2);
+        assertEquals((Integer)150, result.getA());
+        assertEquals((Double)300.0, result.getB());
     }
     
     @Test
