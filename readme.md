@@ -5,7 +5,11 @@ We use this tools for increasing speed of development, for keep code clean and s
 Utils are updated regularly by Projector development team. If you have an idea, you can state it by creating an issue.
 This project is open source, so after discussing and approving the requirements for the innovation, we can start working together to improve the utilities.
 Our main rule is 3S: safety, security and stability. Write good tests, check your code perfomance and keep it simple [stupid].
-JavaDoc is available on Github Pages: [Utils 0.0.3 docs](https://projector-solutions.github.io/docs/utils/index.html?overview-summary.html "Utils 0.0.3 JavaDoc").
+JavaDoc is available on Github Pages: 
+[Utils 0.0.3 docs](https://projector-solutions.github.io/docs/utils/0.0.3/index.html?overview-summary.html "Utils 0.0.3 JavaDoc").
+[Utils 0.0.4 docs](https://projector-solutions.github.io/docs/utils/0.0.4/index.html?overview-summary.html "Utils 0.0.4 JavaDoc").
+Now project documentation is not actual and nice (foo). But we works on improving it. Also you can view discussed innovations and ideas, which are most likely to be included in future versions
+at [Utils Info page](https://projector-solutions.github.io/docs/utils/roadmap.html "Utils Info page").
 
 # Using
 You can use this tools by dependency for Gradle or Maven.
@@ -115,7 +119,46 @@ Now project contains tools for reading and writing DSV to file or stream. See or
 #### 2. String Joiner - CharSequence implementation for simple joining strings with specified delimiter.
 Projector's String Joiner is a analog of java.util.StringJoiner class for platforms without this class (i.e. Android OS).  
   
-## v. 0.0.4 (Democracy) - IN PROGRESS
+## v. 0.0.4 (Democracy) - Bugs, Vulnerabilities and Features
+### New features:
+#### 1. New Stream aggregate functions. 
+Stream minDuet() and maxDuet() returns Duet of item and it's double equivalent.
+Old min() and max() saved, but was refactored.
+#### 2. Improved NotNull and Nullable annotations.
+Added new Javadoc information to annotations. This information can be exported with your code in IDE or to JavaDOC.
+#### 3. Update in DSV module structure.
+DsvCell moved to org.projector.dsv.data
+DsvTable moved to org.projector.dsv.data
+SimpleDeserializer renamed to DefaultDeserializer and moved to org.projector.dsv.impl
+SimpleSerializer renamed to DefaultSerializer and moved to org.projector.dsv.impl
+Extracted DsvReader and DsvWriter interfaces.
+DsvReader renamed to DefaultDsvReader and moved to org.projector.dsv.impl. Now this class implements DsvReader interface.
+DsvWriter renamed to DefaultDsvWriter and moved to org.projector.dsv.impl. Now this class implements DsvWriter interface.
+#### 4. Added DsvTable toValueStream() and toCellStream() methods. Methods packs all cells or values from cells on each other to stream. For example, table
+Header A | Header B | Header C
+  Anton  |    19    |  Moscow
+  Lizzy  |    24    | New York
+  Mike   |    65    | Hong Kong
+  
+will be packed into stream: (Header A, Header B, Header C, Anton, 19, Moscow, Lizzy, 24, New York, Mike, 65, Hong Kong)
+#### 5. Stream Mutability.
+Now some streams can be mutable by using remove methods. In a future, will be improved methods for adding and replacing values.
+In 0.0.4 was deleted Stream.next(), Stream.hasNext(), added Stream.remove(int), Stream.remove(int, ValueType) and Stream.iterate() methods. 
+Added StreamIterator and MutableStreamIterator interface.
+StreamIterator<I> should has next methods:
+    - hasNext():boolean
+    - next():I
+    - skip(int):void
+MutableStreamIterator<I> extends StreamIterator<I> interface and provides next methods:
+    - remove():void
+    - clear():void
+Stream.iterate() - concurrent but safe method. It can provide millions of iterators, but Stream.remove(int, I), used by
+MutableStreamIterator checks item availability.
+Added Stream.isMutable() and Stream.setMutable(boolean) methods. 
+This methods determine required type of StreamIterator created by Stream.iterate() method.
+### Bugs and vulnerabilities
+#### 6. JUnit vulnerability fix (bump to 4.13.3)
+#### 7. Fixed bugs in Nullable checks. Previously Nullable.checkAllNotNull did not use specified value name.
 
 ## v. 0.0.5 (Even better) - SCHEDULING, January - February 2021
 

@@ -40,29 +40,30 @@ Now project contains tools for reading and writing DSV to file or stream. See or
 Projector's String Joiner is a analog of java.util.StringJoiner class for platforms without this class (i.e. Android OS).
 
 v. 0.0.4 (Democracy) [IN PROGRESS] - Fixes, improvements, new tests
-1. Java 7 compability. POM Java version should be down to Java 1.7 for more compability with Android JVM.
-2. New Stream aggregate functions. Old min(), max(), average() returns double equivalent of stream items. 
-New aggregate functions returns origin stream item. Comparing based on old algorithm with calculating by equivalents.
-3. JUnit vulnerability fix (bump to 4.13.3)
-4. Improve NotNull and Nullable annotations. Add Javadoc information to annotations
-5. Update in DSV module structure.
-DsvCell move to org.projector.dsv.data
-DsvTable move to org.projector.dsv.data
-SimpleDeserializer rename to DefaultDeserializer and move to org.projector.dsv.impl
-SimpleSerializer rename to DefaultSerializer and move to org.projector.dsv.impl
-Extract DsvReader and DsvWriter interfaces.
-DsvReader rename to DefaultDsvReader and move to org.projector.dsv.impl. Now this class should implements DsvReader interface.
-DsvWriter rename to DefaultDsvWriter and move to org.projector.dsv.impl. Now this class should implements DsvWriter interface.
-6. Implement StringDsvReader and StringDsvWriter for read/write data from/into CharSequence instance.
-7. Add DsvTable.toStream() method. Method packs all cells on each other to stream. For example, table
+1. New Stream aggregate functions. 
+   Stream minDuet() and maxDuet() returns Duet of item and it's double equivalent.
+   Old min() and max() saved, but was refactored.
+2. JUnit vulnerability fix (bump to 4.13.3)
+3. Improved NotNull and Nullable annotations: added new Javadoc information to annotations.
+4. Update in DSV module structure.
+DsvCell moved to org.projector.dsv.data
+DsvTable moved to org.projector.dsv.data
+SimpleDeserializer renamed to DefaultDeserializer and moved to org.projector.dsv.impl
+SimpleSerializer renamed to DefaultSerializer and moved to org.projector.dsv.impl
+Extracted DsvReader and DsvWriter interfaces.
+DsvReader renamed to DefaultDsvReader and moved to org.projector.dsv.impl. Now this class implements DsvReader interface.
+DsvWriter renamed to DefaultDsvWriter and moved to org.projector.dsv.impl. Now this class implements DsvWriter interface.
+5. Added DsvTable toValueStream() and toCellStream() methods. Methods packs all cells or values from cells on each other to stream. For example, table
 Header A | Header B | Header C
   Anton  |    19    |  Moscow
   Lizzy  |    24    | New York
   Mike   |    65    | Hong Kong
   
-should be packed into stream: (Header A, Header B, Header C, Anton, 19, Moscow, Lizzy, 24, New York, Mike, 65, Hong Kong)
-8. Delete Stream.next(), Stream.hasNext(). Add Stream.remove(int), Stream.remove(int, I) and Stream.iterate() methods. 
-Add StreamIterator interface.
+will be packed into stream: (Header A, Header B, Header C, Anton, 19, Moscow, Lizzy, 24, New York, Mike, 65, Hong Kong)
+6. Stream Mutability.
+Now some streams can be mutable by using remove methods. In a future, will be improved methods for adding and replacing values.
+In 0.0.4 was deleted Stream.next(), Stream.hasNext(), added Stream.remove(int), Stream.remove(int, ValueType) and Stream.iterate() methods. 
+Added StreamIterator and MutableStreamIterator interface.
 StreamIterator<I> should has next methods:
     - hasNext():boolean
     - next():I
@@ -72,5 +73,6 @@ MutableStreamIterator<I> extends StreamIterator<I> interface and provides next m
     - clear():void
 Stream.iterate() - concurrent but safe method. It can provide millions of iterators, but Stream.remove(int, I), used by
 MutableStreamIterator checks item availability.
-9. Add public Stream.isMutable():boolean and Protected Stream.setMutable(boolean) method. 
+Added Stream.isMutable() and Stream.setMutable(boolean) methods. 
 This methods determine required type of StreamIterator created by Stream.iterate() method.
+7. Fixed bugs in Nullable checks. Previously Nullable.checkAllNotNull did not use specified value name.
